@@ -2,13 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
-#include "UObject/Interface.h"
-#include "UObject/ScriptMacros.h"
-#include "GenericPlatform/GenericPlatformMisc.h"
-#include <functional>
 
-#include "AndroidJavaObject.h"
 #include "AndroidJavaClass.h"
+// Copyright Epic Games, Inc. All Rights Reserved.
+
 #include "FURuStoreError.h"
 #include "RuStoreListener.h"
 #include "URuStoreReviewManager.generated.h"
@@ -19,6 +16,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRequestReviewFlowResponseDelegate, 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FLaunchReviewFlowErrorDelegate, int64, requestId, FURuStoreError, error);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLaunchReviewFlowResponseDelegate, int64, requestId);
 
+using namespace RuStoreSDK;
+
 UCLASS(Blueprintable)
 class RUSTOREREVIEW_API URuStoreReviewManager : public UObject, public RuStoreListenerContainer
 {
@@ -26,17 +25,14 @@ class RUSTOREREVIEW_API URuStoreReviewManager : public UObject, public RuStoreLi
 
 private:
     static URuStoreReviewManager* _instance;
-    static bool _isInstanceInitialized;
+    static bool _bIsInstanceInitialized;
 
-    bool _allowNativeErrorHandling;
-
-    AndroidJavaObject* _clientWrapper;
+    bool bIsInitialized = false;
+    bool _bAllowNativeErrorHandling = false;
+    AndroidJavaObject* _clientWrapper = nullptr;
 
 public:
     static const FString PluginVersion;
-
-    UPROPERTY(BlueprintReadOnly)
-    bool isInitialized = false;
 
     UFUNCTION()
     bool getIsInitialized();
@@ -44,12 +40,8 @@ public:
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
     static URuStoreReviewManager* Instance();
 
+	UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
     void SetAllowNativeErrorHandling(bool value);
-
-    URuStoreReviewManager();
-    ~URuStoreReviewManager();
-
-    void BeginDestroy();
 
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
     bool Init();
@@ -57,13 +49,15 @@ public:
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
     void Dispose();
 
-    long RequestReviewFlow(TFunction<void(long, FURuStoreError*)> onFailure, TFunction<void(long)> onSuccess);
-    long LaunchReviewFlow(TFunction<void(long, FURuStoreError*)> onFailure, TFunction<void(long)> onSuccess);
+    void ConditionalBeginDestroy();
+
+    long RequestReviewFlow(TFunction<void(long)> onSuccess, TFunction<void(long, TSharedPtr<FURuStoreError, ESPMode::ThreadSafe>)> onFailure);
+    long LaunchReviewFlow(TFunction<void(long)> onSuccess, TFunction<void(long, TSharedPtr<FURuStoreError, ESPMode::ThreadSafe>)> onFailure);
 
 
     // 
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
-    void RequestReviewFlow(int64& requestId);
+    void RequestReviewFlow();
 
     UPROPERTY(BlueprintAssignable, Category = "RuStore Review Manager")
     FRequestReviewFlowErrorDelegate OnRequestReviewFlowError;
@@ -74,7 +68,7 @@ public:
 
     // 
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
-    void LaunchReviewFlow(int64& requestId);
+    void LaunchReviewFlow();
 
     UPROPERTY(BlueprintAssignable, Category = "RuStore Review Manager")
     FLaunchReviewFlowErrorDelegate OnLaunchReviewFlowError;

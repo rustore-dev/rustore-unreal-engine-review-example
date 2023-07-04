@@ -1,14 +1,14 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
+
 package com.Plugins.RuStoreReview;
 
-import com.Plugins.RuStoreCore.IResponseListenerWrapper;
+import com.Plugins.RuStoreCore.IRuStoreListener;
 import ru.rustore.unitysdk.review.ReviewResponseListener;
 
-import android.util.Log;
-
-public class ReviewResponseListenerWrapper implements IResponseListenerWrapper, ReviewResponseListener
+public class ReviewResponseListenerWrapper implements IRuStoreListener, ReviewResponseListener
 {
     private Object mutex = new Object();
-    private long cppPointer = 0;
+    private long cppPointer;
 
     private native void NativeOnFailure(long pointer, Throwable throwable);
     private native void NativeOnSuccess(long pointer);
@@ -21,7 +21,6 @@ public class ReviewResponseListenerWrapper implements IResponseListenerWrapper, 
     public void OnFailure(Throwable throwable) {
         synchronized (mutex) {
             if (cppPointer != 0) {
-                Log.e("rustore", "ReviewResponse: Error message");
                 NativeOnFailure(cppPointer, throwable);
             }
         }
@@ -31,7 +30,6 @@ public class ReviewResponseListenerWrapper implements IResponseListenerWrapper, 
     public void OnSuccess() {
         synchronized (mutex) {
             if (cppPointer != 0) {
-                Log.e("rustore", "ReviewResponse: Success message");
                 NativeOnSuccess(cppPointer);
             }
         }
@@ -39,7 +37,6 @@ public class ReviewResponseListenerWrapper implements IResponseListenerWrapper, 
 
     public void DisposeCppPointer() {
         synchronized (mutex) {
-            Log.e("rustore", "FeatureAvailabilityResult: Dispose pointer");
             cppPointer = 0;
         }
     }

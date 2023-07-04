@@ -1,21 +1,22 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
+
 #include "URuStoreReviewManager.h"
 #include "URuStoreCore.h"
 #include "ReviewResponseListenerImpl.h"
 
-using namespace std;
+using namespace RuStoreSDK;
 
 const FString URuStoreReviewManager::PluginVersion = "0.1";
-
 URuStoreReviewManager* URuStoreReviewManager::_instance = nullptr;
-bool URuStoreReviewManager::_isInstanceInitialized = false;
+bool URuStoreReviewManager::_bIsInstanceInitialized = false;
 
-bool URuStoreReviewManager::getIsInitialized() { return isInitialized; }
+bool URuStoreReviewManager::getIsInitialized() { return bIsInitialized; }
 
 URuStoreReviewManager* URuStoreReviewManager::Instance()
 {
-    if (!_isInstanceInitialized)
+    if (!_bIsInstanceInitialized)
     {
-        _isInstanceInitialized = true;
+        _bIsInstanceInitialized = true;
         _instance = NewObject<URuStoreReviewManager>(GetTransientPackage());
     }
 
@@ -24,103 +25,90 @@ URuStoreReviewManager* URuStoreReviewManager::Instance()
 
 void URuStoreReviewManager::SetAllowNativeErrorHandling(bool value)
 {
-    _allowNativeErrorHandling = value;
+    if (!URuStoreCore::IsPlatformSupported()) return;
+    if (bIsInitialized) return;
 
-    if (isInitialized)
-    {
-        _clientWrapper->CallVoid("setErrorHandling", value);
-    }
-}
-
-URuStoreReviewManager::URuStoreReviewManager()
-{
-}
-
-URuStoreReviewManager::~URuStoreReviewManager()
-{
+    _bAllowNativeErrorHandling = value;
+    _clientWrapper->CallVoid("setErrorHandling", value);
 }
 
 bool URuStoreReviewManager::Init()
 {
     if (!URuStoreCore::IsPlatformSupported()) return false;
-    if (isInitialized) return false;
+    if (bIsInitialized) return false;
 
     _instance->AddToRoot();
 
     URuStoreCore::Instance()->Init();
 
-    AndroidJavaClass* clientJavaClass = new AndroidJavaClass("ru/rustore/unitysdk/review/RuStoreUnityReviewManager");
+    auto clientJavaClass = MakeShared<AndroidJavaClass>("ru/rustore/unitysdk/review/RuStoreUnityReviewManager");
     _clientWrapper = clientJavaClass->GetStaticAJObject("INSTANCE");
     _clientWrapper->CallVoid("init");
 
-    isInitialized = true;
-
-    return isInitialized;
+    return bIsInitialized = true;
 }
 
 void URuStoreReviewManager::Dispose()
 {
-    if (isInitialized)
+    if (bIsInitialized)
     {
-        isInitialized = false;
+        bIsInitialized = false;
         ListenerRemoveAll();
         delete _clientWrapper;
         _instance->RemoveFromRoot();
     }
 }
 
-void URuStoreReviewManager::BeginDestroy()
+void URuStoreReviewManager::ConditionalBeginDestroy()
 {
-    Super::BeginDestroy();
+    Super::ConditionalBeginDestroy();
 
     Dispose();
-    if (_isInstanceInitialized) _isInstanceInitialized = false;
+    if (_bIsInstanceInitialized) _bIsInstanceInitialized = false;
 }
 
-long URuStoreReviewManager::RequestReviewFlow(TFunction<void(long, FURuStoreError*)> onFailure, TFunction<void(long)> onSuccess)
+long URuStoreReviewManager::RequestReviewFlow(TFunction<void(long)> onSuccess, TFunction<void(long, TSharedPtr<FURuStoreError, ESPMode::ThreadSafe>)> onFailure)
 {
     if (!URuStoreCore::IsPlatformSupported(onFailure)) return 0;
-    if (!isInitialized) return 0;
+    if (!bIsInitialized) return 0;
 
-    auto listener = new ReviewResponseListenerImpl(onFailure, onSuccess, [this](RuStoreListener* item) { ListenerUnbind(item); });
-    ListenerBind((RuStoreListener*)listener);
+    auto listener = ListenerBind(new ReviewResponseListenerImpl(onSuccess, onFailure, [this](RuStoreListener* item) { ListenerUnbind(item); }));
     _clientWrapper->CallVoid("requestReviewFlow", listener->GetJWrapper());
 
     return listener->GetId();
 }
 
-long URuStoreReviewManager::LaunchReviewFlow(TFunction<void(long, FURuStoreError*)> onFailure, TFunction<void(long)> onSuccess)
+long URuStoreReviewManager::LaunchReviewFlow(TFunction<void(long)> onSuccess, TFunction<void(long, TSharedPtr<FURuStoreError, ESPMode::ThreadSafe>)> onFailure)
 {
     if (!URuStoreCore::IsPlatformSupported(onFailure)) return 0;
-    if (!isInitialized) return 0;
+    if (!bIsInitialized) return 0;
 
-    auto listener = new ReviewResponseListenerImpl(onFailure, onSuccess, [this](RuStoreListener* item) { ListenerUnbind(item); });
-    ListenerBind((RuStoreListener*)listener);
+    auto listener = ListenerBind(new ReviewResponseListenerImpl(onSuccess, onFailure, [this](RuStoreListener* item) { ListenerUnbind(item); }));
     _clientWrapper->CallVoid("launchReviewFlow", listener->GetJWrapper());
 
     return listener->GetId();
 }
 
-void URuStoreReviewManager::RequestReviewFlow(int64& requestId)
+void URuStoreReviewManager::RequestReviewFlow()
 {
-    requestId = RequestReviewFlow(
-        [this](long requestId, FURuStoreError* error) {
-            OnRequestReviewFlowError.Broadcast(requestId, *error);
-        },
+    RequestReviewFlow(
         [this](long requestId) {
             OnRequestReviewFlowResponse.Broadcast(requestId);
+        },
+        [this](long requestId, TSharedPtr<FURuStoreError, ESPMode::ThreadSafe> error) {
+            OnRequestReviewFlowError.Broadcast(requestId, *error);
         }
     );
 }
 
-void URuStoreReviewManager::LaunchReviewFlow(int64& requestId)
+void URuStoreReviewManager::LaunchReviewFlow()
 {
-    requestId = LaunchReviewFlow(
-        [this](long requestId, FURuStoreError* error) {
-            OnLaunchReviewFlowError.Broadcast(requestId, *error);
-        },
+    LaunchReviewFlow(
         [this](long requestId) {
             OnLaunchReviewFlowResponse.Broadcast(requestId);
+        },
+        [this](long requestId, TSharedPtr<FURuStoreError, ESPMode::ThreadSafe> error) {
+            OnLaunchReviewFlowError.Broadcast(requestId, *error);
         }
     );
 }
