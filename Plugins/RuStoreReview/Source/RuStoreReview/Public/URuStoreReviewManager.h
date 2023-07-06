@@ -34,7 +34,7 @@ private:
 public:
     static const FString PluginVersion;
 
-    UFUNCTION()
+    UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
     bool getIsInitialized();
 
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
