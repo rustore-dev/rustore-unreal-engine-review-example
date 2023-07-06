@@ -57,7 +57,7 @@ public:
 
     // 
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
-    void RequestReviewFlow();
+    void RequestReviewFlow(int64& requestId);
 
     UPROPERTY(BlueprintAssignable, Category = "RuStore Review Manager")
     FRequestReviewFlowErrorDelegate OnRequestReviewFlowError;
@@ -68,7 +68,7 @@ public:
 
     // 
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
-    void LaunchReviewFlow();
+    void LaunchReviewFlow(int64& requestId);
 
     UPROPERTY(BlueprintAssignable, Category = "RuStore Review Manager")
     FLaunchReviewFlowErrorDelegate OnLaunchReviewFlowError;

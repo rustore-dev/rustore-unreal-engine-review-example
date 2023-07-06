@@ -89,9 +89,9 @@ long URuStoreReviewManager::LaunchReviewFlow(TFunction<void(long)> onSuccess, TF
     return listener->GetId();
 }
 
-void URuStoreReviewManager::RequestReviewFlow()
+void URuStoreReviewManager::RequestReviewFlow(int64& requestId)
 {
-    RequestReviewFlow(
+    requestId = RequestReviewFlow(
         [this](long requestId) {
             OnRequestReviewFlowResponse.Broadcast(requestId);
         },
@@ -101,9 +101,9 @@ void URuStoreReviewManager::RequestReviewFlow()
     );
 }
 
-void URuStoreReviewManager::LaunchReviewFlow()
+void URuStoreReviewManager::LaunchReviewFlow(int64& requestId)
 {
-    LaunchReviewFlow(
+    requestId = LaunchReviewFlow(
         [this](long requestId) {
             OnLaunchReviewFlowResponse.Broadcast(requestId);
         },
