@@ -43,7 +43,7 @@ bool URuStoreReviewManager::Init()
 
     auto clientJavaClass = MakeShared<AndroidJavaClass>("ru/rustore/unitysdk/review/RuStoreUnityReviewManager");
     _clientWrapper = clientJavaClass->GetStaticAJObject("INSTANCE");
-    _clientWrapper->CallVoid("init");
+    _clientWrapper->CallVoid("init", FString("unreal"));
 
     return bIsInitialized = true;
 }
