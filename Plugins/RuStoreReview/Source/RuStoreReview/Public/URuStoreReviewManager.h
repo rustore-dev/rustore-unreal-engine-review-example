@@ -1,11 +1,9 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
+
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Object.h"
-
 #include "AndroidJavaClass.h"
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "FURuStoreError.h"
 #include "RuStoreListener.h"
 #include "URuStoreReviewManager.generated.h"
