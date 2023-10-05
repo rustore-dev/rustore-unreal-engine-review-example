@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <prebuildCopies>
+    <copyDir src="$S(PluginDir)/Private/Java" dst="$S(BuildDir)/src/com/Plugins/RuStoreReview" />
+  </prebuildCopies>
+
+  <resourceCopies>
+    <copyDir src="$S(PluginDir)/ThirdParty/Android" dst="$S(BuildDir)/libs" />
+  </resourceCopies>
+  
+  <buildGradleAdditions>
+    <insert>      
+      ext.review_type = ''
+      
+      if (project.hasProperty('rustore_sdk_type')) {
+        review_type = rustore_sdk_type
+      }
+      
+      dependencies {
+        // RuStore Review
+        implementation("ru.rustore.sdk:review:0.1.6$review_type")
+        implementation fileTree(include: ["RuStoreUnityReview${review_type}.aar"], dir: 'src/main/libs')
+      }
+    </insert>
+  </buildGradleAdditions>
+
+</root>
