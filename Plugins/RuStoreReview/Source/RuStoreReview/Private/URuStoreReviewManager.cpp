@@ -6,7 +6,7 @@
 
 using namespace RuStoreSDK;
 
-const FString URuStoreReviewManager::PluginVersion = "0.2";
+const FString URuStoreReviewManager::PluginVersion = "0.4";
 URuStoreReviewManager* URuStoreReviewManager::_instance = nullptr;
 bool URuStoreReviewManager::_bIsInstanceInitialized = false;
 
