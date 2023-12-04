@@ -1,11 +1,9 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
+
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Object.h"
-
 #include "AndroidJavaClass.h"
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "FURuStoreError.h"
 #include "RuStoreListener.h"
 #include "URuStoreReviewManager.generated.h"
@@ -35,7 +33,7 @@ public:
     static const FString PluginVersion;
 
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
-    bool getIsInitialized();
+    bool GetIsInitialized();
 
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
     static URuStoreReviewManager* Instance();
