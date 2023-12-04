@@ -6,11 +6,11 @@
 
 using namespace RuStoreSDK;
 
-const FString URuStoreReviewManager::PluginVersion = "0.1";
+const FString URuStoreReviewManager::PluginVersion = "1.0";
 URuStoreReviewManager* URuStoreReviewManager::_instance = nullptr;
 bool URuStoreReviewManager::_bIsInstanceInitialized = false;
 
-bool URuStoreReviewManager::getIsInitialized() { return bIsInitialized; }
+bool URuStoreReviewManager::GetIsInitialized() { return bIsInitialized; }
 
 URuStoreReviewManager* URuStoreReviewManager::Instance()
 {
@@ -43,7 +43,7 @@ bool URuStoreReviewManager::Init()
 
     auto clientJavaClass = MakeShared<AndroidJavaClass>("ru/rustore/unitysdk/review/RuStoreUnityReviewManager");
     _clientWrapper = clientJavaClass->GetStaticAJObject("INSTANCE");
-    _clientWrapper->CallVoid("init");
+    _clientWrapper->CallVoid("init", FString("unreal"));
 
     return bIsInitialized = true;
 }
