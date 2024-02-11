@@ -1,7 +1,6 @@
 package ru.rustore.unitysdk.review;
 
 import ru.rustore.sdk.core.exception.RuStoreException
-import ru.rustore.sdk.core.tasks.OnCompleteListener
 import ru.rustore.unitysdk.core.PlayerProvider
 import ru.rustore.sdk.review.RuStoreReviewManager
 import ru.rustore.sdk.review.RuStoreReviewManagerFactory
@@ -31,16 +30,13 @@ object RuStoreUnityReviewManager {
         }
 
         reviewManager.requestReviewFlow()
-            .addOnCompleteListener(object : OnCompleteListener<ReviewInfo> {
-                override fun onFailure(throwable: Throwable) {
-                    listener.OnFailure(throwable)
-                }
-
-                override fun onSuccess(result: ReviewInfo) {
-                    reviewInfo = result
-                    listener.OnSuccess()
-                }
-            })
+            .addOnSuccessListener { result ->
+                reviewInfo = result
+                listener.OnSuccess()
+            }
+            .addOnFailureListener { throwable ->
+                listener.OnFailure(throwable)
+            }
     }
 
     fun launchReviewFlow(listener: ReviewResponseListener) {
@@ -50,15 +46,14 @@ object RuStoreUnityReviewManager {
         }
 
         reviewInfo?.let {
-            reviewManager.launchReviewFlow(reviewInfo = it).addOnCompleteListener(object: OnCompleteListener<Unit> {
-                override fun onFailure(throwable: Throwable) {
-                    listener.OnFailure(throwable)
-                }
-
-                override fun onSuccess(result: Unit) {
+            reviewManager
+                .launchReviewFlow(reviewInfo = it)
+                .addOnSuccessListener {
                     listener.OnSuccess()
                 }
-            })
+                .addOnFailureListener { throwable ->
+                    listener.OnFailure(throwable)
+                }
         }
     }
 }
