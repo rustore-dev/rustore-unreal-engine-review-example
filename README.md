@@ -19,7 +19,7 @@
 ### Сборка примера приложения
 
 Вы можете ознакомиться с демонстрационным приложением содержащим представление работы всех методов sdk:
-- [README](APP_EXAMPLE.md)
+- [README](unreal_example/README.md)
 
 
 ### История изменений
@@ -34,4 +34,4 @@
 
 ### Техническая поддержка
 
-Дополнительная помощь и инструкции доступны на странице [help.rustore.ru](https://help.rustore.ru/) и по электронной почте [support@rustore.ru](mailto:support@rustore.ru).
+Дополнительная помощь и инструкции доступны на странице [rustore.ru/help/](https://www.rustore.ru/help/) и по электронной почте [support@rustore.ru](mailto:support@rustore.ru).
