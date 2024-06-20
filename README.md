@@ -33,7 +33,7 @@
 
 3. Выполните сборку проекта командой gradle assemble.
 
-При успешном выполнении сборки в папках _“unreal_example / Plugins / RuStoreReview / Source / RuStoreReview / ThirdParty / Android / libs”_ и _“unreal_example / Plugins / RuStoreCore / Source / RuStoreCore / ThirdParty / Android / libs”_ будут созданы файлы:
+При успешном выполнении сборки в папках _“unreal_example / Plugins / RuStoreReview / Source / RuStoreReview / ThirdParty / Android / libs”_ и _“unreal_example / Plugins / RuStoreCore / Source / RuStoreCore / ThirdParty / Android / libs”_ будут обновлены файлы:
 - RuStoreUnityReview.aar
 - RuStoreUnityCore.aar
 
