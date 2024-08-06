@@ -1,5 +1,8 @@
 ## История изменений
 
+### Release 6.0.0
+- Версия SDK review 6.+
+
 ### Release 2.0
 - Версия SDK review 2.+
 
