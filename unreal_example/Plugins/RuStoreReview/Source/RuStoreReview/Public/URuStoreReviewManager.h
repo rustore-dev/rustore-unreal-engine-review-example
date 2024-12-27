@@ -16,6 +16,11 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLaunchReviewFlowResponseDelegate, i
 
 using namespace RuStoreSDK;
 
+/*!
+@brief
+    Класс для работы с оценками и отзывами.
+    Предоставляет API для запуска UI-формы, позволяющей пользователю оставить оценку и отзыв о вашем приложении в "RuStore".
+*/
 UCLASS(Blueprintable)
 class RUSTOREREVIEW_API URuStoreReviewManager : public UObject, public RuStoreListenerContainer
 {
@@ -30,26 +35,77 @@ private:
     AndroidJavaObject* _clientWrapper = nullptr;
 
 public:
+    /*!
+    @brief Версия плагина.
+    */
     static const FString PluginVersion;
 
+    /*!
+    @brief Проверка инициализации менеджера.
+    @return Возвращает true, если синглтон инициализирован, в противном случае — false.
+    */
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
     bool GetIsInitialized();
 
+    /*!
+    @brief
+        Получить экземпляр URuStoreReviewManager.
+    @return
+        Возвращает указатель на единственный экземпляр URuStoreReviewManager (реализация паттерна Singleton).
+        Если экземпляр еще не создан, создает его.
+    */
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
     static URuStoreReviewManager* Instance();
 
-	UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
+    /*!
+    @brief Обработка ошибок в нативном SDK.
+    @param value true — разрешает обработку ошибок, false — запрещает.
+    */
+    UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
     void SetAllowNativeErrorHandling(bool value);
 
+    /*!
+    @brief Выполняет инициализацию синглтона URuStoreReviewManager.
+    @return Возвращает true, если инициализация была успешно выполнена, в противном случае — false.
+    */
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
     bool Init();
 
+    /*!
+    @brief Деинициализация синглтона, если дальнейшая работа с объектом больше не планируется.
+    */
     UFUNCTION(BlueprintCallable, Category = "RuStore Review Manager")
     void Dispose();
 
     void ConditionalBeginDestroy();
 
+    /*!
+    @brief
+        Выполняет подготовку данных для запуска формы оценки и отзыва.
+        Метод должен быть вызван перед каждым вызовом LaunchReviewFlow.
+        Время жизни подготовленных данных — около пяти минут.
+    @param onSuccess
+        Действие, выполняемое при успешном завершении операции.
+        Возвращает requestId типа long.
+    @param onFailure
+        Действие, выполняемое в случае ошибки.
+        Возвращает requestId типа long и объект типа FURuStoreError с информацией об ошибке.
+    @return Возвращает уникальный в рамках одного запуска приложения requestId.
+    */
     long RequestReviewFlow(TFunction<void(long)> onSuccess, TFunction<void(long, TSharedPtr<FURuStoreError, ESPMode::ThreadSafe>)> onFailure);
+    
+    /*!
+    @brief
+        Выполняет запуск формы для запроса оценки и отзыва у пользователя.
+        Каждому вызову метода должен предшествовать вызов RequestReviewFlow.
+    @param onSuccess
+        Действие, выполняемое при успешном завершении операции.
+        Возвращает requestId типа long.
+    @param onFailure
+        Действие, выполняемое в случае ошибки.
+        Возвращает requestId типа long и объект типа FURuStoreError с информацией об ошибке.
+    @return Возвращает уникальный в рамках одного запуска приложения requestId.
+    */
     long LaunchReviewFlow(TFunction<void(long)> onSuccess, TFunction<void(long, TSharedPtr<FURuStoreError, ESPMode::ThreadSafe>)> onFailure);
 
 
