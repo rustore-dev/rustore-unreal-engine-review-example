@@ -64,6 +64,6 @@
 
 Дополнительная помощь и инструкции доступны на странице [rustore.ru/help/](https://www.rustore.ru/help/) и по электронной почте [support@rustore.ru](mailto:support@rustore.ru).
 
-[10]: https://www.rustore.ru/help/sdk/reviews-ratings/unreal/7-0-0
-[20]: https://www.rustore.ru/help/sdk/reviews-ratings/unreal/7-0-0#prestart
-[30]: https://www.rustore.ru/help/sdk/reviews-ratings/unreal/7-0-0#start
+[10]: https://www.rustore.ru/help/sdk/reviews-ratings/unreal/8-0-0
+[20]: https://www.rustore.ru/help/sdk/reviews-ratings/unreal/8-0-0#prestart
+[30]: https://www.rustore.ru/help/sdk/reviews-ratings/unreal/8-0-0#start
