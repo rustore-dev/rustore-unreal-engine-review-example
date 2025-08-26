@@ -15,7 +15,7 @@
       
       dependencies {
         // RuStore Review
-        implementation("ru.rustore.sdk:review:9.1.0$review_type")
+        implementation("ru.rustore.sdk:review:10.0.0$review_type")
         implementation fileTree(include: ["RuStoreUnityReview${review_type}.aar"], dir: 'src/main/libs')
       }
     </insert>
