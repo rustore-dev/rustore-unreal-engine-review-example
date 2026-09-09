@@ -1,8 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "ULaunchReviewFlowNode.h"
-
-using namespace RuStoreSDK;
 
 ULaunchReviewFlowNode::ULaunchReviewFlowNode(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {

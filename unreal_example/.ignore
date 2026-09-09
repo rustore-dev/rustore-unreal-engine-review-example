@@ -1,0 +1,12 @@
+/.vs
+/.vscode
+/Content
+/DerivedDataCache
+/images
+/Intermediate
+/Saved
+/Script
+/Plugins/RuStoreCore/Content
+/Plugins/RuStoreCore/Intermediate
+/Plugins/RuStoreReview/Content
+/Plugins/RuStoreReview/Intermediate

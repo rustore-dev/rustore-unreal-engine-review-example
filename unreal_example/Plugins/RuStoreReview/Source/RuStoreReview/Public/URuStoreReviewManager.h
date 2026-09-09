@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -14,15 +12,13 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRequestReviewFlowResponseDelegate, 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FLaunchReviewFlowErrorDelegate, int64, requestId, FURuStoreError, error);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLaunchReviewFlowResponseDelegate, int64, requestId);
 
-using namespace RuStoreSDK;
-
 /*!
 @brief
     Класс для работы с оценками и отзывами.
     Предоставляет API для запуска UI-формы, позволяющей пользователю оставить оценку и отзыв о вашем приложении в "RuStore".
 */
 UCLASS(Blueprintable)
-class RUSTOREREVIEW_API URuStoreReviewManager : public UObject, public RuStoreListenerContainer
+class RUSTOREREVIEW_API URuStoreReviewManager : public UObject, public RuStoreSDK::RuStoreListenerContainer
 {
 	GENERATED_BODY()
 
@@ -32,7 +28,7 @@ private:
 
     bool bIsInitialized = false;
     bool _bAllowNativeErrorHandling = false;
-    AndroidJavaObject* _clientWrapper = nullptr;
+    RuStoreSDK::AndroidJavaObject* _clientWrapper = nullptr;
 
 public:
     /*!
