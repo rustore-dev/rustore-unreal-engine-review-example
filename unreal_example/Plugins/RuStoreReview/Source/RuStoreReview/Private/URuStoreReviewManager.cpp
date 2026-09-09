@@ -1,12 +1,10 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "URuStoreReviewManager.h"
 #include "URuStoreCore.h"
 #include "ReviewResponseListenerImpl.h"
 
 using namespace RuStoreSDK;
 
-const FString URuStoreReviewManager::PluginVersion = "10.0.0";
+const FString URuStoreReviewManager::PluginVersion = "10.5.1";
 URuStoreReviewManager* URuStoreReviewManager::_instance = nullptr;
 bool URuStoreReviewManager::_bIsInstanceInitialized = false;
 
@@ -41,7 +39,7 @@ bool URuStoreReviewManager::Init()
 
     URuStoreCore::Instance()->Init();
 
-    auto clientJavaClass = MakeShared<AndroidJavaClass>("ru/rustore/unitysdk/review/RuStoreUnityReviewManager");
+    auto clientJavaClass = MakeShared<AndroidJavaClass>("ru/rustore/unrealsdk/review/RuStoreUnrealReviewManager");
     _clientWrapper = clientJavaClass->GetStaticAJObject("INSTANCE");
     _clientWrapper->CallVoid("init", FString("unreal"));
 

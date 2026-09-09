@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
 
 #include "SimpleResponseListener.h"
@@ -13,7 +11,7 @@ namespace RuStoreSDK
             TFunction<void(long)> onSuccess,
             TFunction<void(long, TSharedPtr<FURuStoreError, ESPMode::ThreadSafe>)> onFailure,
             TFunction<void(RuStoreListener*)> onFinish
-        ) : SimpleResponseListener("ru/rustore/unitysdk/review/wrappers/ReviewResponseListenerWrapper", "ru/rustore/unitysdk/review/ReviewResponseListener", onSuccess, onFailure, onFinish)
+        ) : SimpleResponseListener("ru/rustore/unrealsdk/review/wrappers/ReviewResponseListenerWrapper", "ru/rustore/unrealsdk/review/ReviewResponseListener", onSuccess, onFailure, onFinish)
         {
         }
     };
